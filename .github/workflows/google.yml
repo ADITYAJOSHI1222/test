@@ -58,6 +58,6 @@ jobs:
     # Set up kustomize
     - name: deployment
       run: |-
-        kubectl create deployment testing --image=adityajoshi1222/adityatestimage
+        kubectl create deployment testing --image="$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
         kubectl expose deployment testing --type=LoadBalancer --port=80 --target-port=3000 --name=testing-service
 
