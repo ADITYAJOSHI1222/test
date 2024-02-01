@@ -58,6 +58,8 @@ jobs:
     # Set up kustomize
     - name: deployment
       run: |-
+        kubectl delete deployment testing     
         kubectl create deployment testing --image="$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
+        kubectl delete svc testing-service
         kubectl expose deployment testing --type=LoadBalancer --port=80 --target-port=3000 --name=testing-service
 
