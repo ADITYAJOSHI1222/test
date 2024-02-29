@@ -1,12 +1,19 @@
+// Importing the required modules
 const http = require('http');
-const port = process.env.PORT || 3000;
 
+// Creating a server instance
 const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  const msg = 'unthinkable!\n'
-  res.end(msg);
+  // Set the response header with status code 200 and content type
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  
+  // Sending the response
+  res.end('Hello, World!\n');
 });
 
+// Define the port the server will listen to
+const port = 3000;
+
+// Start the server and listen on the specified port
 server.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}/`);
+  console.log(`Server running at http://localhost:${port}/`);
 });
