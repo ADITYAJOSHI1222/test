@@ -34,6 +34,5 @@
         - name: Set Up Cloud SDK
           uses: google-github-actions/setup-gcloud@v1
         
-        - name: Access Secret
-          run: |
-            gcloud secrets versions access "latest" --secret="my-secret"
+        - name: Authenticate with Workload Identity Federation
+          run: gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project experiment-416614
