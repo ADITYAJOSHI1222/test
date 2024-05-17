@@ -1,41 +1,36 @@
-  name: GCP Deployment Workflow
+name: GCP Deployment Workflow
 
-  on:
-    push:
-      branches:
-        - master
+on:
+  push:
+    branches:
+      - master
 
-  jobs:
-    deploy:
-      runs-on: ubuntu-latest
-      
-      permissions:
-        contents: read
-        id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      id-token: write
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          workload_identity_provider: 'projects/310765810412/locations/global/workloadIdentityPools/githubactions/providers/github'
+          service_account: 'gtihubactions@experiment-416614.iam.gserviceaccount.com'  
 
-        - id: 'auth'
-          name: 'Authenticate to Google Cloud'
-          uses: 'google-github-actions/auth@v0.4.0'
-          with:
-            workload_identity_provider: 'projects/310765810412/locations/global/workloadIdentityPools/githubactions/providers/github'
-            service_account: 'gtihubactions@experiment-416614.iam.gserviceaccount.com'  
+      - name: Set Up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
 
-        - name: Set Up Cloud SDK
-          uses: google-github-actions/setup-gcloud@v1
-            
-        - id: 'get-credentials'
-          uses: 'google-github-actions/get-gke-credentials@v2'
-          with:
-            cluster_name: 'cluster-1'
-            location: 'us-central1-c'
-        
-        - id: get-pods
-          run: kubectl get pods
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: 'cluster-1'
+          location: 'us-central1-c'
 
-        - name: Authenticate cluster
-          run: gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project experiment-416614
+      - name: Get Pods
+        run: kubectl get pods
