@@ -28,11 +28,11 @@
         - name: Set Up Cloud SDK
           uses: google-github-actions/setup-gcloud@v1
             
-        - id: get-gke-credentials
-          uses: google-github-actions/get-gke-credentials@v0.4.0
+        - id: 'get-credentials'
+          uses: 'google-github-actions/get-gke-credentials@v2'
           with:
-            cluster_name: cluster-1
-            location: us-central1-c
+            cluster_name: 'cluster-1'
+            location: 'us-central1-c'
         
         - id: get-pods
           run: kubectl get pods
