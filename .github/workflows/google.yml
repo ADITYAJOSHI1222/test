@@ -1,4 +1,4 @@
-name: Cypress Tests
+name: GCP Deployment Workflow
 
 on:
   push:
@@ -6,24 +6,26 @@ on:
       - master
 
 jobs:
-  cypress:
+  deploy:
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          node-version: '14'
+          workload_identity_provider: ''
+          service_account: ''
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v2
-        with:
-          record: true
-          browser: chrome
-          headless: true
+      - name: Set Up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      
+      - name: Access Secret
+        run: |
+          gcloud secrets versions access "latest" --secret="my-secret"
