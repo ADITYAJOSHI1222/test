@@ -1,31 +1,39 @@
-name: GCP Deployment Workflow
+  name: GCP Deployment Workflow
 
-on:
-  push:
-    branches:
-      - master
+  on:
+    push:
+      branches:
+        - master
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
-      id-token: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: 'projects/310765810412/locations/global/workloadIdentityPools/githubactions/providers/github'
-          service_account: 'gtihubactions@experiment-416614.iam.gserviceaccount.com'
-
-      - name: Set Up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
       
-      - name: Access Secret
-        run: |
-          gcloud secrets versions access "latest" --secret="my-secret"
+      permissions:
+        contents: read
+        id-token: write
+
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+
+        - id: 'auth'
+          name: 'Authenticate to Google Cloud'
+          uses: 'google-github-actions/auth@v0.4.0'
+          with:
+            workload_identity_provider: 'projects/310765810412/locations/global/workloadIdentityPools/githubactions/providers/github'
+            service_account: 'gtihubactions@experiment-416614.iam.gserviceaccount.com'  
+
+        # - name: Authenticate to Google Cloud
+        #   uses: google-github-actions/auth@v1
+        #   with:
+        #     workload_identity_provider: 'projects/310765810412/locations/global/workloadIdentityPools/githubactions/providers/github'
+        #     service_account: 'gtihubactions@experiment-416614.iam.gserviceaccount.com'
+
+        - name: Set Up Cloud SDK
+          uses: google-github-actions/setup-gcloud@v1
+        
+        - name: Access Secret
+          run: |
+            gcloud secrets versions access "latest" --secret="my-secret"
