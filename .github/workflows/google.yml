@@ -38,4 +38,4 @@ jobs:
           location: 'us-central1-c'
 
       - name: Get Pods
-        run: kubectl get pods
+        run: gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project experiment-416614
